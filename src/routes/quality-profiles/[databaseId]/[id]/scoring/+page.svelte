@@ -28,6 +28,7 @@
 	import DropdownHeader from '$ui/dropdown/DropdownHeader.svelte';
 	import CustomGroupManager from '$ui/dropdown/CustomGroupManager.svelte';
 	import ScoringTable from './components/ScoringTable.svelte';
+	import { buildScoreMarkers } from './components/scoreMarkers.ts';
 	import PageMeta from '$ui/meta/PageMeta.svelte';
 	import { getPersistentSearchStore, type SearchStore } from '$lib/client/stores/search';
 	import { onMount, tick } from 'svelte';
@@ -41,6 +42,8 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	$: scoreMarkers = buildScoreMarkers(data.localChanges.rows);
 
 	$: databaseId = parseInt($page.params.databaseId ?? '0', 10);
 
@@ -978,6 +981,8 @@
 								arrTypes={visibleArrTypes}
 								{customFormatScores}
 								{customFormatEnabled}
+								{scoreMarkers}
+								customFormatRenames={data.localChanges.customFormatRenames}
 								{getArrTypeColor}
 								title={group.name}
 								firstRowOnboarding={groupIndex === 0 ? 'qp-scoring-row' : undefined}
